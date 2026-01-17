@@ -1,8 +1,14 @@
 package org.example.demoapplication.model;
 
+import jakarta.validation.constraints.*;
+
 public class Student {
+    @NotNull
     private final int id;
+    @NotBlank
     private String name;
+    @Min(value = 1,message = "Age must be greater than 1")
+    @Max(value = 150,message = "Age must be realistic")
     private int age;
 
     public Student(int id, String name, int age) {

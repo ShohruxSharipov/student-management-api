@@ -1,5 +1,6 @@
 package org.example.demoapplication.controller;
 
+import jakarta.validation.Valid;
 import org.example.demoapplication.model.Student;
 import org.example.demoapplication.service.StudentService;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class StudentController {
     }
 
     @PostMapping("")
-    public String addStudent(@RequestBody Student student) {
+    public String addStudent(@Valid @RequestBody Student student) {
         studentService.addStudent(student);
         return "Student added successfully !";
     }
