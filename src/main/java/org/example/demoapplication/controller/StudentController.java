@@ -1,7 +1,9 @@
 package org.example.demoapplication.controller;
 
 import jakarta.validation.Valid;
-import org.example.demoapplication.model.Student;
+import org.example.demoapplication.dto.request.StudentCreateRequest;
+import org.example.demoapplication.dto.response.StudentResponse;
+import org.example.demoapplication.dto.update.StudentUpdateRequest;
 import org.example.demoapplication.service.StudentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +20,13 @@ public class StudentController {
     }
 
     @GetMapping
-    public List<Student> getStudents() {
-        return studentService.getStudents();
+    public ResponseEntity<List<StudentResponse>> getStudents() {
+        return ResponseEntity.ok(studentService.getStudents());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable int id) {
-        Student student = studentService.getStudent(id);
+    public ResponseEntity<StudentResponse> getStudentById(@PathVariable int id) {
+        StudentResponse student = studentService.getStudent(id);
         if (student != null) {
             return ResponseEntity.ok(student);
         }
@@ -32,36 +34,35 @@ public class StudentController {
     }
 
     @PostMapping("")
-    public String addStudent(@Valid @RequestBody Student student) {
+    public ResponseEntity<Void> addStudent(@Valid @RequestBody StudentCreateRequest student) {
         studentService.addStudent(student);
-        return "Student added successfully !";
+        return ResponseEntity.status(201).build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteStudent(@PathVariable int id) {
+    public ResponseEntity<Void> deleteStudent(@PathVariable int id) {
         if (studentService.deleteStudent(id)) {
-            return ResponseEntity.ok("Student deleted successfully");
+            return ResponseEntity.ok().build();
         }
-        return ResponseEntity.badRequest().body("Student not found !");
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Student>> searchStudents(
+    public ResponseEntity<List<StudentResponse>> searchStudents(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Integer minAge,
             @RequestParam(required = false) Integer maxAge
     ) {
-        List<Student> students = studentService.searchStudents(name, minAge, maxAge);
-        return ResponseEntity.notFound().build();
+        List<StudentResponse> students = studentService.searchStudents(name, minAge, maxAge);
+        return ResponseEntity.ok(students);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updateStudent(@PathVariable int id,
-                                                @RequestParam(required = false) String name,
-                                                @RequestParam(required = false) Integer age) {
-        if (studentService.updateStudent(id, name, age)) {
-            return ResponseEntity.ok("Student updated successfully");
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateStudent(@PathVariable int id,
+                                               @Valid @RequestBody StudentUpdateRequest request) {
+        if (studentService.updateStudent(id, request)) {
+            return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.notFound().build();
     }
 }

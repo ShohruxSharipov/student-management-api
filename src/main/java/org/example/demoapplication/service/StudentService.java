@@ -1,5 +1,8 @@
 package org.example.demoapplication.service;
 
+import org.example.demoapplication.dto.request.StudentCreateRequest;
+import org.example.demoapplication.dto.response.StudentResponse;
+import org.example.demoapplication.dto.update.StudentUpdateRequest;
 import org.example.demoapplication.model.Student;
 import org.springframework.stereotype.Service;
 
@@ -9,35 +12,48 @@ import java.util.List;
 @Service
 public class StudentService {
     private final List<Student> students = new ArrayList<>();
-
-    public List<Student> getStudents() {
-        return students;
+    static int idGen = 1;
+    private int generateID(){
+        return idGen++;
+    }
+    public List<StudentResponse> getStudents() {
+        List<StudentResponse> responses = new ArrayList<>();
+        for (int i = 0; i < students.size(); i++) {
+            Student student = students.get(i);
+            responses.add(new StudentResponse(student.getId(),student.getName(), student.getAge()));
+        }
+        return responses;
     }
 
-    public Student getStudent(int id) {
+    public StudentResponse getStudent(int id) {
         for (Student student : students) {
             if (student.getId() == id) {
-                return student;
+                return new StudentResponse(student.getId(),student.getName(), student.getAge());
             }
         }
         return null;
     }
 
-    public void addStudent(Student student) {
+    public void addStudent(StudentCreateRequest request) {
+        Student student = new Student(generateID(), request.getName(), request.getAge());
+
         students.add(student);
     }
 
     public Boolean deleteStudent(int id) {
-        Student student = getStudent(id);
-        if (student != null) {
-            students.remove(student);
-            return true;
+        for (int i = 0; i < students.size(); i++) {
+            Student student = students.get(i);
+            if (student.getId() == id) {
+                students.remove(student);
+                return true;
+            }
+
         }
         return false;
     }
 
-    public List<Student> searchStudents(String name, Integer minAge, Integer maxAge) {
-        List<Student> filteredStudents = new ArrayList<>();
+    public List<StudentResponse> searchStudents(String name, Integer minAge, Integer maxAge) {
+        List<StudentResponse> filteredStudents = new ArrayList<>();
 
         String nameFilter = "";
         Integer minAgeFilter = Integer.MIN_VALUE;
@@ -54,7 +70,7 @@ public class StudentService {
         for (Student student : students) {
             if (student.getAge() >= minAgeFilter && student.getAge() <= maxAgeFilter) {
                 if (student.getName().toLowerCase().contains(nameFilter)) {
-                    filteredStudents.add(student);
+                    filteredStudents.add(new StudentResponse(student.getId(),student.getName(),student.getAge()));
                 }
             }
         }
@@ -62,16 +78,16 @@ public class StudentService {
         return filteredStudents;
     }
 
-    public Boolean updateStudent(int id, String name, Integer age) {
-        Student student = getStudent(id);
-        if (student == null) {
-            return false;
+    public Boolean updateStudent(int id, StudentUpdateRequest request) {
+        for (Student student : students) {
+            if (student.getId() == id) {
+                if (request.getName() != null) student.setName(request.getName());
+                if (request.getAge() != null) student.setAge(request.getAge());
+                return true;
+            }
+
         }
-        if (name != null) student.setName(name);
-
-        if (age != null) student.setAge(age);
-
-        return true;
+        return false;
 
     }
 }
