@@ -28,11 +28,9 @@ _The application uses an in-memory list (no database)._
 - GET /students/search – search students using query parameters
 ```
 
-### Notes :
+**Notes :**
 
-- No database is used
-
-- Data is stored in memory
+- Data is stored in an H2 in-memory database
 
 - Project is for learning purposes
 

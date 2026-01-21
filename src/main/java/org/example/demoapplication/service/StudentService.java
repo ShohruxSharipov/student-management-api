@@ -4,6 +4,7 @@ import org.example.demoapplication.dto.request.StudentCreateRequest;
 import org.example.demoapplication.dto.response.StudentResponse;
 import org.example.demoapplication.dto.update.StudentUpdateRequest;
 import org.example.demoapplication.model.Student;
+import org.example.demoapplication.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,83 +12,56 @@ import java.util.List;
 
 @Service
 public class StudentService {
-    private final List<Student> students = new ArrayList<>();
-    static int idGen = 1;
-    private int generateID(){
-        return idGen++;
+
+    StudentRepository repository;
+
+    StudentService(StudentRepository repository) {
+        this.repository = repository;
     }
+
     public List<StudentResponse> getStudents() {
         List<StudentResponse> responses = new ArrayList<>();
-        for (int i = 0; i < students.size(); i++) {
-            Student student = students.get(i);
-            responses.add(new StudentResponse(student.getId(),student.getName(), student.getAge()));
+        List<Student> students = repository.findAll();
+        for (Student student : students) {
+            responses.add(new StudentResponse(student.getId(), student.getName(), student.getAge()));
         }
         return responses;
     }
 
-    public StudentResponse getStudent(int id) {
-        for (Student student : students) {
-            if (student.getId() == id) {
-                return new StudentResponse(student.getId(),student.getName(), student.getAge());
-            }
+    public StudentResponse getStudent(Long id) {
+        Student student = repository.getStudentById(id);
+        if (student != null) {
+            return new StudentResponse(student.getId(), student.getName(), student.getAge());
         }
         return null;
     }
 
     public void addStudent(StudentCreateRequest request) {
-        Student student = new Student(generateID(), request.getName(), request.getAge());
-
-        students.add(student);
+        repository.save(new Student(request.getName(), request.getAge()));
     }
 
-    public Boolean deleteStudent(int id) {
-        for (int i = 0; i < students.size(); i++) {
-            Student student = students.get(i);
-            if (student.getId() == id) {
-                students.remove(student);
-                return true;
-            }
-
+    public Boolean deleteStudent(Long id) {
+        if (repository.existsById(id)){
+            repository.deleteById(id);
+            return true;
         }
         return false;
     }
 
     public List<StudentResponse> searchStudents(String name, Integer minAge, Integer maxAge) {
-        List<StudentResponse> filteredStudents = new ArrayList<>();
 
-        String nameFilter = "";
-        Integer minAgeFilter = Integer.MIN_VALUE;
-        Integer maxAgeFilter = Integer.MAX_VALUE;
-        if (name != null) {
-            nameFilter = name.trim().toLowerCase();
-        }
-        if (minAge != null) {
-            minAgeFilter = minAge;
-        }
-        if (maxAge != null) {
-            maxAgeFilter = maxAge;
-        }
-        for (Student student : students) {
-            if (student.getAge() >= minAgeFilter && student.getAge() <= maxAgeFilter) {
-                if (student.getName().toLowerCase().contains(nameFilter)) {
-                    filteredStudents.add(new StudentResponse(student.getId(),student.getName(),student.getAge()));
-                }
-            }
-        }
-
-        return filteredStudents;
+        return repository.search(name,minAge,maxAge).stream().map(student ->
+                new StudentResponse(student.getId(),student.getName(),student.getAge())).toList();
     }
 
-    public Boolean updateStudent(int id, StudentUpdateRequest request) {
-        for (Student student : students) {
-            if (student.getId() == id) {
-                if (request.getName() != null) student.setName(request.getName());
-                if (request.getAge() != null) student.setAge(request.getAge());
-                return true;
-            }
+    public Boolean updateStudent(Long id, StudentUpdateRequest request) {
+        Student student = repository.getStudentById(id);
+        if (student == null) return false;
 
-        }
-        return false;
+        if (request.getName() != null) student.setName(request.getName());
+        if (request.getAge() != null) student.setAge(request.getAge());
+        repository.save(student);
+        return true;
 
     }
 }

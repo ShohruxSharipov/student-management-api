@@ -1,23 +1,31 @@
 package org.example.demoapplication.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
-
+@Entity
 public class Student {
-    @NotNull
-    private final int id;
+    @Id
+    @GeneratedValue
+    private Long id;
     @NotBlank
     private String name;
     @Min(value = 1,message = "Age must be greater than 1")
     @Max(value = 150,message = "Age must be realistic")
     private int age;
-
-    public Student(int id, String name, int age) {
-        this.id = id;
+public Student(){}
+    public Student(String name, int age) {
         this.name = name;
         this.age = age;
     }
 
-    public int getId() {
+
+    public void setId1(Long id1) {
+        this.id = id1;
+    }
+
+    public Long getId() {
         return id;
     }
     public String getName() {
