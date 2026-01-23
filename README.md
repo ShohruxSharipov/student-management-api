@@ -13,6 +13,8 @@ _The application uses an in-memory list (no database)._
 
 - Spring Web
 
+- H2 database
+
 ### API Endpoints :
 
 ```- GET /students – get all students
@@ -30,7 +32,7 @@ _The application uses an in-memory list (no database)._
 
 **Notes :**
 
-- Data is stored in an H2 in-memory database
+- Data is stored in an H2 file database
 
 - Project is for learning purposes
 
