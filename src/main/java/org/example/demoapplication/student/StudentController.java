@@ -1,10 +1,9 @@
-package org.example.demoapplication.controller;
+package org.example.demoapplication.student;
 
 import jakarta.validation.Valid;
-import org.example.demoapplication.dto.request.StudentCreateRequest;
-import org.example.demoapplication.dto.response.StudentResponse;
-import org.example.demoapplication.dto.update.StudentUpdateRequest;
-import org.example.demoapplication.service.StudentService;
+import org.example.demoapplication.student.dto.StudentCreateRequest;
+import org.example.demoapplication.student.dto.StudentResponse;
+import org.example.demoapplication.student.dto.StudentUpdateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,10 +1,8 @@
-package org.example.demoapplication.service;
+package org.example.demoapplication.student;
 
-import org.example.demoapplication.dto.request.StudentCreateRequest;
-import org.example.demoapplication.dto.response.StudentResponse;
-import org.example.demoapplication.dto.update.StudentUpdateRequest;
-import org.example.demoapplication.model.Student;
-import org.example.demoapplication.repository.StudentRepository;
+import org.example.demoapplication.student.dto.StudentCreateRequest;
+import org.example.demoapplication.student.dto.StudentResponse;
+import org.example.demoapplication.student.dto.StudentUpdateRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

@@ -1,8 +1,7 @@
-package org.example.demoapplication.dto.update;
+package org.example.demoapplication.student.dto;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class StudentUpdateRequest {

@@ -13,7 +13,7 @@ _The application uses an in-memory list (no database)._
 
 - Spring Web
 
-- H2 database
+- Postgresql database
 
 ### API Endpoints :
 
@@ -23,7 +23,7 @@ _The application uses an in-memory list (no database)._
 
 - POST /students – add a new student
 
-- PUT /students/{id} – update student
+- PATCH /students/{id} – update student
 
 - DELETE /students/{id} – delete student
 
@@ -32,7 +32,8 @@ _The application uses an in-memory list (no database)._
 
 **Notes :**
 
-- Data is stored in an H2 file database
+- Data is stored in a Postgresql
+- Configure proper url, user and password in application.properties
 
 - Project is for learning purposes
 
