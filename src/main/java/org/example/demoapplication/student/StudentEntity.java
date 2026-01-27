@@ -3,9 +3,11 @@ package org.example.demoapplication.student;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.*;
 @Entity
-public class Student {
+@Table(name = "student")
+public class StudentEntity {
     @Id
     @GeneratedValue
     private Long id;
@@ -14,8 +16,8 @@ public class Student {
     @Min(value = 1,message = "Age must be greater than 1")
     @Max(value = 150,message = "Age must be realistic")
     private int age;
-public Student(){}
-    public Student(String name, int age) {
+public StudentEntity(){}
+    public StudentEntity(String name, int age) {
         this.name = name;
         this.age = age;
     }

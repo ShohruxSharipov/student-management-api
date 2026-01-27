@@ -1,42 +1,34 @@
+## Student Management REST API
 
-## **Student Management REST API Description :** 
+A simple Spring Boot REST API for managing students.  
+This project was created to practice REST concepts such as controllers, services, DTOs, validation, and HTTP methods.
 
-_A simple Spring Boot REST API for managing students. This project was created to practice REST concepts such as controllers, services, request handling, and HTTP methods._
+The application uses a PostgreSQL database for data persistence.
 
-_The application uses an in-memory list (no database)._
-
-### Technologies :
+### Technologies
 
 - Java
-
 - Spring Boot
-
 - Spring Web
+- PostgreSQL
+- HTML, CSS, JavaScript
 
-- Postgresql database
+### API Endpoints
 
-### API Endpoints :
+- GET /students - get all students
+- GET /students/{id} - get student by ID
+- POST /students - create a new student
+- PUT /students/{id} - update student
+- DELETE /students/{id} - delete student
+- GET /students/search - search students using query parameters
 
-```- GET /students – get all students
 
-- GET /students/{id} – get student by ID
+### Notes
 
-- POST /students – add a new student
-
-- PATCH /students/{id} – update student
-
-- DELETE /students/{id} – delete student
-
-- GET /students/search – search students using query parameters
-```
-
-**Notes :**
-
-- Data is stored in a Postgresql
-- Configure proper url, user and password in application.properties
-
+- Data is stored in PostgreSQL
+- Configure database URL, username, and password in `application.properties`
 - Project is for learning purposes
 
-**Author :
-Shohruh**
+### Author
 
+Shohruh

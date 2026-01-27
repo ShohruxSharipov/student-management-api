@@ -7,17 +7,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public interface StudentRepository extends JpaRepository<Student,Long> {
-    Student getStudentById(Long id);
+public interface StudentRepository extends JpaRepository<StudentEntity,Long> {
 
+    StudentEntity getStudentById(Long id);
 
         @Query("""
-        SELECT s FROM Student s
+        SELECT s FROM StudentEntity s
         WHERE (:name IS NULL OR LOWER(s.name) LIKE LOWER(CONCAT('%', :name, '%')))
           AND (:minAge IS NULL OR s.age >= :minAge)
           AND (:maxAge IS NULL OR s.age <= :maxAge)
     """)
-        List<Student> search(String name, Integer minAge, Integer maxAge);
+        List<StudentEntity> search(String name, Integer minAge, Integer maxAge);
 
 
     boolean existsById(Long id);

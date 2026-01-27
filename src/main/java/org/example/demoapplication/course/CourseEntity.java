@@ -3,11 +3,11 @@ package org.example.demoapplication.course;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import org.example.demoapplication.student.Student;
+import org.example.demoapplication.student.StudentEntity;
 
 @Entity
-public class Course {
+@Table(name = "course")
+public class CourseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -17,7 +17,7 @@ public class Course {
     Integer credits;
     @ManyToOne
     @JoinColumn(name = "student_id")
-    Student student;
+    StudentEntity studentEntity;
 
     public Long getId() {
         return id;
@@ -43,11 +43,11 @@ public class Course {
         this.credits = credits;
     }
 
-    public Student getStudent() {
-        return student;
+    public StudentEntity getStudent() {
+        return studentEntity;
     }
 
-    public void setStudent(Student student) {
-        this.student = student;
+    public void setStudent(StudentEntity studentEntity) {
+        this.studentEntity = studentEntity;
     }
 }

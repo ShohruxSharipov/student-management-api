@@ -1,5 +1,6 @@
 package org.example.demoapplication.student;
 
+import org.example.demoapplication.exceptions.student.StudentNotFoundException;
 import org.example.demoapplication.student.dto.StudentCreateRequest;
 import org.example.demoapplication.student.dto.StudentResponse;
 import org.example.demoapplication.student.dto.StudentUpdateRequest;
@@ -19,23 +20,27 @@ public class StudentService {
 
     public List<StudentResponse> getStudents() {
         List<StudentResponse> responses = new ArrayList<>();
-        List<Student> students = repository.findAll();
-        for (Student student : students) {
-            responses.add(new StudentResponse(student.getId(), student.getName(), student.getAge()));
+        List<StudentEntity> studentEntities = repository.findAll();
+        for (StudentEntity studentEntity : studentEntities) {
+            responses.add(new StudentResponse(studentEntity.getId(), studentEntity.getName(), studentEntity.getAge()));
         }
         return responses;
     }
 
     public StudentResponse getStudent(Long id) {
-        Student student = repository.getStudentById(id);
-        if (student != null) {
-            return new StudentResponse(student.getId(), student.getName(), student.getAge());
-        }
-        return null;
+        StudentEntity studentEntity = repository.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException(id));
+
+        return new StudentResponse(
+                studentEntity.getId(),
+                studentEntity.getName(),
+                studentEntity.getAge()
+        );
     }
 
+
     public void addStudent(StudentCreateRequest request) {
-        repository.save(new Student(request.getName(), request.getAge()));
+        repository.save(new StudentEntity(request.getName(), request.getAge()));
     }
 
     public Boolean deleteStudent(Long id) {
@@ -48,17 +53,17 @@ public class StudentService {
 
     public List<StudentResponse> searchStudents(String name, Integer minAge, Integer maxAge) {
 
-        return repository.search(name,minAge,maxAge).stream().map(student ->
-                new StudentResponse(student.getId(),student.getName(),student.getAge())).toList();
+        return repository.search(name,minAge,maxAge).stream().map(studentEntity ->
+                new StudentResponse(studentEntity.getId(), studentEntity.getName(), studentEntity.getAge())).toList();
     }
 
     public Boolean updateStudent(Long id, StudentUpdateRequest request) {
-        Student student = repository.getStudentById(id);
-        if (student == null) return false;
+        StudentEntity studentEntity = repository.getStudentById(id);
+        if (studentEntity == null) return false;
 
-        if (request.getName() != null) student.setName(request.getName());
-        if (request.getAge() != null) student.setAge(request.getAge());
-        repository.save(student);
+        if (request.getName() != null) studentEntity.setName(request.getName());
+        if (request.getAge() != null) studentEntity.setAge(request.getAge());
+        repository.save(studentEntity);
         return true;
 
     }
